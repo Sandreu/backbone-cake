@@ -1,0 +1,1 @@
+Javascript libs for CakePHP porjects on backbone
