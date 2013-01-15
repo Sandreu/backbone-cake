@@ -286,6 +286,7 @@ Backbone.ModalForm = Backbone.CakeView.extend({
         this.model.on('destroy', this.destroyed, this);
 
         if (this._form) {
+            this._form.off();
             this._form.remove();
             delete this._form;
         }
@@ -295,7 +296,7 @@ Backbone.ModalForm = Backbone.CakeView.extend({
         this._form.$el.trigger('beautifier');
 
         this.initForm();
-        
+
         this._modal.open();
 
         return this;

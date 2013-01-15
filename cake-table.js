@@ -148,7 +148,6 @@ Backbone.CakeRow = Backbone.CakeView.extend({
 });
 
 Backbone.CakeTable = Backbone.CakeView.extend({
-	title : 'Titre',
 	cols : {
 		'Nom' : 'name'
 	},
@@ -172,12 +171,12 @@ Backbone.CakeTable = Backbone.CakeView.extend({
 		'click .delete' : 'row_delete'
 	},
 	modal: Backbone.ModalForm,
+	modalTitle : 'Titre',
 	initialize : function () {
 		if (_.isFunction(this.cols)) this.cols = this.cols.call(this);
 
-		if (this)
 		this.modal = new this.modal({
-			title: this.title
+			title: this.modalTitle
 		});
 		this.collection.on('saved', this.newRow, this);
 		this.collection.on('reset', this.render, this);
