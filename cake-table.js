@@ -175,9 +175,11 @@ Backbone.CakeTable = Backbone.CakeView.extend({
 	initialize : function () {
 		if (_.isFunction(this.cols)) this.cols = this.cols.call(this);
 
-		this.modal = new this.modal({
-			title: this.modalTitle
-		});
+		if (_.isFunction(this.modal)) {
+			this.modal = new this.modal({
+				title: this.modalTitle
+			});
+		}
 		this.collection.on('saved', this.newRow, this);
 		this.collection.on('reset', this.render, this);
 	},
@@ -207,7 +209,17 @@ Backbone.CakeTable = Backbone.CakeView.extend({
 		_.each(this.cols, function (options, label) {
 			if (_.isString(options)) options = {field: options};
 			var $tag = $('<th>').appendTo($tr);
-			if (!isset(options.no_title)) $tag.html(label);
+
+			if (!isset(options.no_title)) {
+				if (_.isFunction(options.title)) {
+					var content = options.title.call(this, options);
+					$tag.append(content);
+				} else if (_.isString(options.title)) {
+					$tag.append(title);
+				} else {
+					$tag.html(label);
+				}
+			}
 		});
 		if (this.buttons.length > 0) {
 			var $th = $('<th>').appendTo($tr);

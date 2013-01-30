@@ -264,6 +264,9 @@ Backbone.ModalForm = Backbone.CakeView.extend({
 
         this.loadModal();
         this.$el = this._modal.$el;
+
+        this.$el.on('submit', 'form', $.proxy(this.commit, this));
+
         this._modal.on('hidden', this.onHidden, this);
         _.bindAll(this);
     },
@@ -302,7 +305,8 @@ Backbone.ModalForm = Backbone.CakeView.extend({
         return this;
     },
     initForm : function () {},
-    commit : function () {
+    commit : function (e) {
+        if (isset(e)) e.preventDefault();
         var a = this._form.commit(),
             self = this;
         if (!isset(a)) {
