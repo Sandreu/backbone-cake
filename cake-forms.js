@@ -332,8 +332,8 @@ Backbone.ModalForm = Backbone.CakeView.extend({
                     } else {
                         message('error', 'Erreur lors de la requette')
                     }
-                }
-                //wait:true
+                },
+                wait:true
             });
         }
     },
