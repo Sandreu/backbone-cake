@@ -259,6 +259,11 @@ Backbone.ModalForm = Backbone.CakeView.extend({
         input.focus();
         if (this.model.isNew()) input.select();
     },
+    setTitle: function (content) {
+        this.title = content;
+        this._modal.options.title = content;
+        this.$('.modal-header h3').html(content);
+    },
     initialize : function (options) {
         if (isset(options.title)) this.title = options.title;
 
@@ -307,10 +312,11 @@ Backbone.ModalForm = Backbone.CakeView.extend({
     initForm : function () {},
     commit : function (e) {
         if (isset(e)) e.preventDefault();
-        var a = this._form.commit(),
+        var a = this._form.validate(),
             self = this;
-        if (!isset(a)) {
-            this.model.save({}, {
+
+        if (!a) {
+            this.model.save(this._form.getValue(), {
                 success : function () { self._modal.close(); },
                 error : function (model, xhr) {
                     var data = eval('(' + xhr.responseText + ')');
@@ -327,6 +333,7 @@ Backbone.ModalForm = Backbone.CakeView.extend({
                         message('error', 'Erreur lors de la requette')
                     }
                 }
+                //wait:true
             });
         }
     },
