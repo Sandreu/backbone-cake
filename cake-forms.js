@@ -226,6 +226,7 @@ Backbone.ModalForm = Backbone.CakeView.extend({
     _modal : false,
     _form : false,
     manage: false,
+    saved: false,
     originalDatas : {},
     loadModal : function () {
         var modal = new Backbone.BootstrapModal({
@@ -249,7 +250,6 @@ Backbone.ModalForm = Backbone.CakeView.extend({
         }
 
         modal.on('shown', this.setFocus, this);
-        modal.on('cancel', this.canceled, this);
         modal.on('ok', this.commit, this);
 
         this._modal = modal;
@@ -276,6 +276,7 @@ Backbone.ModalForm = Backbone.CakeView.extend({
         _.bindAll(this);
     },
     onHidden : function () {
+        if (!this.saved) this.canceled();
         this.model.off(null, null, this);
         this._form.off(null, null, this);
     },
@@ -291,6 +292,7 @@ Backbone.ModalForm = Backbone.CakeView.extend({
     },
     render : function () {
         this.originalDatas = this.model.toJSON();
+        this.saved = false;
         this.model.on('destroy', this.destroyed, this);
 
         if (this._form) {
@@ -317,7 +319,10 @@ Backbone.ModalForm = Backbone.CakeView.extend({
 
         if (!a) {
             this.model.save(this._form.getValue(), {
-                success : function () { self._modal.close(); },
+                success : function () {
+                    self._modal.close();
+                    self.saved = true;
+                },
                 error : function (model, xhr) {
                     var data = eval('(' + xhr.responseText + ')');
                     if (isset(data)) {
