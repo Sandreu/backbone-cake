@@ -273,7 +273,6 @@ Backbone.ModalForm = Backbone.CakeView.extend({
         this.$el.on('submit', 'form', $.proxy(this.commit, this));
 
         this._modal.on('hidden', this.onHidden, this);
-        _.bindAll(this);
     },
     onHidden : function () {
         if (!this.saved) this.canceled();

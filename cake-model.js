@@ -45,11 +45,12 @@ Backbone.CakeModel = Backbone.RelationalModel.extend({
     }
 });
 
+
 if (!_.isUndefined(Backbone.Store)) {
     var _original = Backbone.Store.prototype.resolveIdForItem;
 
     Backbone.Store.prototype.resolveIdForItem = function( type, item ) {
-        if (!_.isEmpty(type.prototype.cakeModel)) {
+        if (!_.isEmpty(type.prototype.cakeModel) && item) {
             if (!_.isEmpty(item[type.prototype.cakeModel])) return _original.call(this, type, item[type.prototype.cakeModel]);
         }
         return _original.apply(this, arguments);
